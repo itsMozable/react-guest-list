@@ -1,7 +1,8 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 
-const baseUrl = 'http://localhost:4000';
+// old version: 'http://localhost:4000';
+const baseUrl = 'http://30abb447-99ee-442a-a854-7c5e19b1b742.id.repl.co';
 
 // Adding first and last name to the form
 function GuestList() {
