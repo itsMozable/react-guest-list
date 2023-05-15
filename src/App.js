@@ -1,23 +1,172 @@
 import './App.css';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 
-export default function App() {
+const baseUrl = 'http://localhost:4000';
+
+// Adding first and last name to the form
+function GuestList() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [guests, setGuests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Getting all guests (aka GET /guests)
+  useEffect(() => {
+    async function fetchGuests() {
+      try {
+        const response = await fetch(`${baseUrl}/guests`);
+        const allGuests = await response.json();
+        setGuests(allGuests);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    }
+    fetchGuests().catch(console.error);
+  }, []);
+
+  const fullNames = guests.map(
+    (guest) => `${guest.firstName} ${guest.lastName}`,
+  );
+  // Defining three Event handlers
+
+  // Getting a single guest (aka GET /guests/:id)
+  /*   async function fetchSingleGuest(index) {
+    const response = await fetch(`${baseUrl}/guests/:${index}`);
+    const guest = await response.json();
+    return guest;
+  } */
+
+  // Creating a new guest (aka POST /guests)
+  async function createNewGuest() {
+    const response = await fetch(`${baseUrl}/guests`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        attending: false,
+      }),
+    });
+    const createdGuest = await response.json();
+    return createdGuest;
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (!firstName || !lastName) {
+      return;
+    }
+    const newGuest = await createNewGuest();
+    console.log(newGuest);
+    const allGuests = [...guests, newGuest];
+    console.log(allGuests);
+    setGuests(allGuests);
+    setFirstName('');
+    setLastName('');
+  }
+
+  // Updating a guest (aka PUT /guests/:id)
+  async function updateGuest(guestId, newState) {
+    const response = await fetch(`${baseUrl}/guests/${guestId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ attending: newState }),
+    });
+    const updatedGuest = await response.json();
+    return updatedGuest;
+  }
+
+  // Toggling the attending status
+  function handleToggleAttending(guestId) {
+    const myGuests = [...guests];
+    const guestIndex = myGuests.findIndex((obj) => obj.id === guestId);
+    const state = myGuests[guestIndex].attending;
+    const newState = !state;
+    const updatedGuest = updateGuest(guestId, newState);
+    myGuests[guestIndex].attending = updatedGuest.attending;
+    setGuests(myGuests);
+  }
+
+  // Deleting a guest (aka DELETE /guests/:id)
+  async function deleteGuest(guestId) {
+    const response = await fetch(`${baseUrl}/guests/${guestId}`, {
+      method: 'DELETE',
+    });
+    const deletedGuest = await response.json();
+    await console.log(deletedGuest);
+    return deletedGuest;
+  }
+
+  // Removing guests from list
+  async function handleDelete(guestId) {
+    const allGuests = [...guests];
+    const guestIndex = allGuests.findIndex((obj) => obj.id === guestId);
+    allGuests.splice(guestIndex, 1);
+    const test = await deleteGuest(guestId);
+    console.log(test);
+    setGuests(allGuests);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div data-test-id="guest">
+      <form onSubmit={async (e) => await handleSubmit(e)}>
+        <label>
+          First Name:
+          <input
+            value={firstName}
+            onChange={(event) => setFirstName(event.target.value)}
+            disabled={isLoading}
+          />
+        </label>
+        <label>
+          Last Name:
+          <input
+            value={lastName}
+            onChange={(event) => setLastName(event.target.value)}
+            disabled={isLoading}
+          />
+        </label>
+        <button disabled={isLoading}>Create</button>
+      </form>
+      <ul>
+        {guests.map((guest) => (
+          <li key={`guest-${guest.index}`}>
+            <div>
+              {guest.firstName} {guest.lastName}
+            </div>
+            <button
+              aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
+              onClick={() => handleDelete(guest.id)}
+              disabled={isLoading}
+            >
+              Remove
+            </button>
+            <div>
+              <input
+                type="checkbox"
+                checked={guest.attending}
+                onChange={() => handleToggleAttending(guest.id)}
+                aria-label={`Attending ${guest.firstName} ${guest.lastName}`}
+                disabled={isLoading}
+              />
+              Attending
+            </div>
+          </li>
+        ))}
+      </ul>
+      <h2>Full Names:</h2>
+      <ul>
+        {fullNames.map((name) => (
+          <li key={`guest-${name}`}>{name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
+export default GuestList;
