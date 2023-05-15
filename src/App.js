@@ -115,62 +115,67 @@ function GuestList() {
   }
 
   return (
-    <main>
-      <h1>Guest List</h1>
-      <div data-test-id="guest">
-        <form onSubmit={async (e) => await handleSubmit(e)}>
-          <label>
-            First Name:
-            <input
-              value={firstName}
-              onChange={(event) => setFirstName(event.target.value)}
-              disabled={isLoading}
-            />
-          </label>
-          <label>
-            Last Name:
-            <input
-              value={lastName}
-              onChange={(event) => setLastName(event.target.value)}
-              disabled={isLoading}
-            />
-          </label>
-          <button disabled={isLoading}>Create</button>
-        </form>
-        <ul>
-          {guests.map((guest) => (
-            <li key={`guest-${guest.index}`}>
-              <div>
-                {guest.firstName} {guest.lastName}
-              </div>
-              <button
-                aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
-                onClick={() => handleDelete(guest.id)}
+    <div data-test-id="guest">
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <h1>Guest List</h1>
+          <form onSubmit={async (e) => await handleSubmit(e)}>
+            <label>
+              First Name:
+              <input
+                value={firstName}
+                onChange={(event) => setFirstName(event.target.value)}
                 disabled={isLoading}
-              >
-                Remove
-              </button>
-              <div>
-                <input
-                  type="checkbox"
-                  checked={guest.attending}
-                  onChange={() => handleToggleAttending(guest.id)}
-                  aria-label={`Attending ${guest.firstName} ${guest.lastName}`}
+              />
+            </label>
+            <label>
+              Last Name:
+              <input
+                value={lastName}
+                onChange={(event) => setLastName(event.target.value)}
+                disabled={isLoading}
+              />
+            </label>
+            <button disabled={isLoading}>Create</button>
+          </form>
+          <ul>
+            {guests.map((guest) => (
+              <li key={`guest-${guest.index}`}>
+                <div>
+                  {guest.firstName} {guest.lastName}
+                </div>
+                <button
+                  aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
+                  onClick={() => handleDelete(guest.id)}
                   disabled={isLoading}
-                />
-                Attending
-              </div>
-            </li>
-          ))}
-        </ul>
-        <h2>Full Names:</h2>
-        <ul>
-          {fullNames.map((name) => (
-            <li key={`guest-${name}`}>{name}</li>
-          ))}
-        </ul>
-      </div>
-    </main>
+                >
+                  Remove
+                </button>
+                <div>
+                  <input
+                    type="checkbox"
+                    checked={guest.attending}
+                    onChange={() => handleToggleAttending(guest.id)}
+                    aria-label={`Attending ${guest.firstName} ${guest.lastName}`}
+                    disabled={isLoading}
+                  />
+                  Attending
+                </div>
+              </li>
+            ))}
+          </ul>
+          <h2>Full Names:</h2>
+          <ul>
+            {fullNames.map((name) => (
+              <li key={`guest-${name}`}>{name}</li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
   );
 }
+
 export default GuestList;
