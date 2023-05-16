@@ -27,10 +27,6 @@ function GuestList() {
     fetchGuests().catch(console.error);
   }, []);
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [guests]);
-
   const fullNames = guests.map(
     (guest) => `${guest.firstName} ${guest.lastName}`,
   );
