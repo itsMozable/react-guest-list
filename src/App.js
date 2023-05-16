@@ -117,7 +117,7 @@ function GuestList() {
   return (
     <div data-test-id="guest">
       {isLoading ? (
-        <div>Loading...</div>
+        <div data-test-id="guest">Loading...</div>
       ) : (
         <>
           <h1>Guest List</h1>
@@ -143,7 +143,7 @@ function GuestList() {
           <div>
             <ul>
               {guests.map((guest) => (
-                <li key={`guest-${guest.index}`}>
+                <li key={`guest-${guest.id}`}>
                   <div>
                     {guest.firstName} {guest.lastName}
                   </div>
