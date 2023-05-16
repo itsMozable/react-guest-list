@@ -4,6 +4,9 @@ dependencies:
   '@upleveled/react-scripts':
     specifier: 5.0.11
     version: 5.0.11(eslint@8.40.0)(react@18.2.0)(sass@1.62.1)(typescript@5.0.4)
+  express:
+    specifier: ^4.18.2
+    version: 4.18.2
   react:
     specifier: ^18.2.0
     version: 18.2.0

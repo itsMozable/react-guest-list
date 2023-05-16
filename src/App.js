@@ -2,7 +2,7 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 
 // const baseUrl = 'http://localhost:4000';
-const baseUrl = 'http://30abb447-99ee-442a-a854-7c5e19b1b742.id.repl.co';
+const baseUrl = 'https://30abb447-99ee-442a-a854-7c5e19b1b742.id.repl.co';
 
 // Adding first and last name to the form
 function GuestList() {
@@ -22,7 +22,7 @@ function GuestList() {
         console.error(error);
         setIsLoading(false);
       }
-      /* setIsLoading(false); */
+      setIsLoading(false);
     }
     fetchGuests().catch(console.error);
   }, []);
@@ -181,5 +181,4 @@ function GuestList() {
     </div>
   );
 }
-
 export default GuestList;
