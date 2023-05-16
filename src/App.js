@@ -18,14 +18,18 @@ function GuestList() {
         const response = await fetch(`${baseUrl}/guests`);
         const allGuests = await response.json();
         setGuests(allGuests);
-        setIsLoading(false);
       } catch (error) {
         console.error(error);
         setIsLoading(false);
       }
+      setIsLoading(false);
     }
     fetchGuests().catch(console.error);
   }, []);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [guests]);
 
   const fullNames = guests.map(
     (guest) => `${guest.firstName} ${guest.lastName}`,
@@ -117,7 +121,6 @@ function GuestList() {
   return (
     <div>
       <h1>Guest List</h1>
-      {isLoading ? <div data-test-id="guest">Loading...</div> : <div> </div>}
       <form onSubmit={async (e) => await handleSubmit(e)}>
         <label>
           First Name:
@@ -137,38 +140,44 @@ function GuestList() {
         </label>
         <button disabled={isLoading}>Create</button>
       </form>
-      <ul>
-        {guests.map((guest) => (
-          <li key={`guest-${guest.index}`}>
-            <div>
-              {guest.firstName} {guest.lastName}
-            </div>
-            <button
-              aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
-              onClick={() => handleDelete(guest.id)}
-              disabled={isLoading}
-            >
-              Remove
-            </button>
-            <div>
-              <input
-                type="checkbox"
-                checked={guest.attending}
-                onChange={() => handleToggleAttending(guest.id)}
-                aria-label={`Attending ${guest.firstName} ${guest.lastName}`}
-                disabled={isLoading}
-              />
-              Attending
-            </div>
-          </li>
-        ))}
-      </ul>
-      <h2>Full Names:</h2>
-      <ul>
-        {fullNames.map((name) => (
-          <li key={`guest-${name}`}>{name}</li>
-        ))}
-      </ul>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <div>
+          <ul>
+            {guests.map((guest) => (
+              <li key={`guest-${guest.index}`}>
+                <div>
+                  {guest.firstName} {guest.lastName}
+                </div>
+                <button
+                  aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
+                  onClick={() => handleDelete(guest.id)}
+                  disabled={isLoading}
+                >
+                  Remove
+                </button>
+                <div>
+                  <input
+                    type="checkbox"
+                    checked={guest.attending}
+                    onChange={() => handleToggleAttending(guest.id)}
+                    aria-label={`Attending ${guest.firstName} ${guest.lastName}`}
+                    disabled={isLoading}
+                  />
+                  Attending
+                </div>
+              </li>
+            ))}
+          </ul>
+          <h2>Full Names:</h2>
+          <ul>
+            {fullNames.map((name) => (
+              <li key={`guest-${name}`}>{name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
