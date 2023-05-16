@@ -158,9 +158,8 @@ function GuestList() {
                     <input
                       type="checkbox"
                       checked={guest.attending}
-                      onChange={() => handleToggleAttending(guest.id)}
                       aria-label={`Attending ${guest.firstName} ${guest.lastName}`}
-                      disabled={isLoading}
+                      onChange={() => handleToggleAttending(guest.id)}
                     />
                     Attending
                   </div>
