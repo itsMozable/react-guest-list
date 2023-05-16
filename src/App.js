@@ -115,9 +115,9 @@ function GuestList() {
   }
 
   return (
-    <div data-test-id="guest">
+    <div>
       <h1>Guest List</h1>
-      {isLoading ? <div>Loading...</div> : <div> </div>}
+      {isLoading ? <div data-test-id="guest">Loading...</div> : <div> </div>}
       <form onSubmit={async (e) => await handleSubmit(e)}>
         <label>
           First Name:
