@@ -22,7 +22,7 @@ function GuestList() {
         console.error(error);
         setIsLoading(false);
       }
-      setIsLoading(false);
+      /* setIsLoading(false); */
     }
     fetchGuests().catch(console.error);
   }, []);
