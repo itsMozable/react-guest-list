@@ -123,7 +123,7 @@ function GuestList() {
           <h1>Guest List</h1>
           <form onSubmit={async (e) => await handleSubmit(e)}>
             <label>
-              First Name:
+              First name:
               <input
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
@@ -131,7 +131,7 @@ function GuestList() {
               />
             </label>
             <label>
-              Last Name:
+              Last name:
               <input
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
