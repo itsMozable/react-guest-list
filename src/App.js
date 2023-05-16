@@ -115,9 +115,9 @@ function GuestList() {
   }
 
   return (
-    <div>
+    <div data-test-id="guest">
       {isLoading ? (
-        <div data-test-id="guest">Loading...</div>
+        <div>Loading...</div>
       ) : (
         <>
           <h1>Guest List</h1>
